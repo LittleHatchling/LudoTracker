@@ -21,17 +21,8 @@ class ScoreScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Record Rolls'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.bar_chart),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (_) => const StatsScreen()),
-              );
-            },
-          )
-        ],
+        backgroundColor: const Color(0xFF121212),
+        elevation: 0,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -39,7 +30,7 @@ class ScoreScreen extends StatelessWidget {
           children: [
             Text(
               'Current Player: ${matchProvider.players[matchProvider.currentPlayerIndex].name}',
-              style: const TextStyle(fontSize: 20),
+              style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -50,14 +41,17 @@ class ScoreScreen extends StatelessWidget {
                 children: diceOutcomes.map((value) {
                   return ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      padding: const EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(20),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
                     ),
                     onPressed: () {
                       matchProvider.recordRoll(value);
                     },
                     child: Text(
                       '$value',
-                      style: const TextStyle(fontSize: 18),
+                      style: const TextStyle(fontSize: 22),
                     ),
                   );
                 }).toList(),
@@ -66,6 +60,20 @@ class ScoreScreen extends StatelessWidget {
           ],
         ),
       ),
+      floatingActionButton: FloatingActionButton.extended(
+        icon: const Icon(Icons.bar_chart, size: 28),
+        label: const Text('View Stats', style: TextStyle(fontSize: 20)),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const StatsScreen()),
+          );
+        },
+        backgroundColor: Colors.tealAccent,
+        foregroundColor: Colors.black,
+        elevation: 8,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }

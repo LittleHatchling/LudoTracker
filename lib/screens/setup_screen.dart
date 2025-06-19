@@ -36,7 +36,8 @@ class _SetupScreenState extends State<SetupScreen> {
   void _startMatch() {
     List<String> playerNames = _nameControllers
         .take(_playerCount)
-        .map((controller) => controller.text.trim().isEmpty ? 'Player' : controller.text)
+        .map((controller) =>
+    controller.text.trim().isEmpty ? 'Player ${_nameControllers.indexOf(controller) + 1}' : controller.text)
         .toList();
 
     Provider.of<MatchProvider>(context, listen: false)
@@ -49,64 +50,75 @@ class _SetupScreenState extends State<SetupScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Wrap content in a Center and ConstrainedBox for a centered layout.
     return Scaffold(
-      appBar: AppBar(title: const Text('Setup Match')),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: ListView(
-          children: [
-            const Text('Select number of players', style: TextStyle(fontSize: 16)),
-            DropdownButton<int>(
-              value: _playerCount,
-              onChanged: (val) {
-                setState(() {
-                  _playerCount = val!;
-                });
-              },
-              items: [2, 3, 4]
-                  .map((count) => DropdownMenuItem(
-                value: count,
-                child: Text('$count Players'),
-              ))
-                  .toList(),
-            ),
-            const SizedBox(height: 16),
-            const Text('Select number of dice', style: TextStyle(fontSize: 16)),
-            DropdownButton<int>(
-              value: _diceCount,
-              onChanged: (val) {
-                setState(() {
-                  _diceCount = val!;
-                });
-              },
-              items: [1, 2, 3, 4]
-                  .map((count) => DropdownMenuItem(
-                value: count,
-                child: Text('$count Dice'),
-              ))
-                  .toList(),
-            ),
-            const SizedBox(height: 16),
-            const Text('Enter player names', style: TextStyle(fontSize: 16)),
-            const SizedBox(height: 8),
-            ...List.generate(_playerCount, (index) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: TextField(
-                  controller: _nameControllers[index],
-                  decoration: InputDecoration(
-                    labelText: 'Player ${index + 1} Name',
-                    border: const OutlineInputBorder(),
-                  ),
+      appBar: AppBar(
+        title: const Text('Setup Match'),
+        backgroundColor: const Color(0xFF121212),
+        elevation: 0,
+      ),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 400),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: ListView(
+              shrinkWrap: true,
+              children: [
+                const Text('Select number of players', style: TextStyle(fontSize: 16)),
+                DropdownButton<int>(
+                  value: _playerCount,
+                  onChanged: (val) {
+                    setState(() {
+                      _playerCount = val!;
+                    });
+                  },
+                  items: [2, 3, 4]
+                      .map((count) => DropdownMenuItem(
+                    value: count,
+                    child: Text('$count Players'),
+                  ))
+                      .toList(),
                 ),
-              );
-            }),
-            const SizedBox(height: 24),
-            ElevatedButton(
-              onPressed: _startMatch,
-              child: const Text('Start Match'),
+                const SizedBox(height: 16),
+                const Text('Select number of dice', style: TextStyle(fontSize: 16)),
+                DropdownButton<int>(
+                  value: _diceCount,
+                  onChanged: (val) {
+                    setState(() {
+                      _diceCount = val!;
+                    });
+                  },
+                  items: [1, 2, 3, 4]
+                      .map((count) => DropdownMenuItem(
+                    value: count,
+                    child: Text('$count Dice'),
+                  ))
+                      .toList(),
+                ),
+                const SizedBox(height: 16),
+                const Text('Enter player names', style: TextStyle(fontSize: 16)),
+                const SizedBox(height: 8),
+                ...List.generate(_playerCount, (index) {
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: TextField(
+                      controller: _nameControllers[index],
+                      decoration: InputDecoration(
+                        labelText: 'Player ${index + 1} Name',
+                        border: const OutlineInputBorder(),
+                      ),
+                    ),
+                  );
+                }),
+                const SizedBox(height: 24),
+                ElevatedButton(
+                  onPressed: _startMatch,
+                  child: const Text('Start Match'),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
     );
